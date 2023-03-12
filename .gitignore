@@ -1,9 +1,8 @@
 .idea
-
+obj
+bin
 projects/**/Library
 projects/**/Temp
-projects/**/obj
-projects/**/bin
 projects/**/Logs
 projects/**/UserSettings
 projects/**/*.csproj
