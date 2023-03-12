@@ -18,6 +18,7 @@ namespace Needle.ClassMerger.Core
 			if (!File.Exists(assemblyPath)) return;
 			try
 			{
+				Debug.Log("PATCH " + assemblyPath);
 				// Lock assemblies while they may be altered
 				EditorApplication.LockReloadAssemblies();
 
@@ -50,12 +51,12 @@ namespace Needle.ClassMerger.Core
 			{
 				EditorApplication.UnlockReloadAssemblies();
 				AssetDatabase.Refresh();
+				EditorUtility.RequestScriptReload();
 			}
 		}
 
 		private static void CopyFromTo(TypeDefinition source, TypeDefinition target)
 		{
-			// move all members
 			foreach (var member in source.Fields)
 			{
 				target.Fields.AddSafe(member.Copy());
