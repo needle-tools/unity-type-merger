@@ -8,3 +8,4 @@ projects/**/Logs
 projects/**/UserSettings
 projects/**/*.csproj
 projects/**/*.sln
+projects/**/Builds
