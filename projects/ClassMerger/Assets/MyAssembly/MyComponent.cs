@@ -12,4 +12,4 @@ namespace DefaultNamespace
 			Debug.Log(this); 
 		}
 	}
-}
+} 

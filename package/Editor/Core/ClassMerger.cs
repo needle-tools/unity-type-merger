@@ -4,7 +4,10 @@ using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Pdb;
 using UnityEditor;
+using UnityEditor.Experimental;
 using UnityEngine;
+
+// https://stackoverflow.com/a/49523780
 
 namespace Needle.ClassMerger.Core
 {
@@ -29,13 +32,13 @@ namespace Needle.ClassMerger.Core
 				if (hasSymbols)
 					readerParameters.SymbolReaderProvider = new PdbReaderProvider();
 				// readerParameters.AssemblyResolver = assemblyResolver; 
-				var stream = Utils.LoadAssemblyForModule(assemblyPath);
-				var module = ModuleDefinition.ReadModule(stream, readerParameters);
+				using var stream = Utils.LoadAssemblyForModule(assemblyPath);
+				using var module = ModuleDefinition.ReadModule(stream, readerParameters);
 
 				var myClass1 = module.Types.FirstOrDefault(t => t.Name == "MyClass1");
 				var myComponent = module.Types.FirstOrDefault(t => t.Name == "MyComponent");
 
-				CopyFromTo(myClass1, myComponent);
+				CopyFromTo(myClass1, myComponent, module);
 
 				var writerParameters = new WriterParameters();
 				writerParameters.WriteSymbols = hasSymbols;
@@ -55,16 +58,22 @@ namespace Needle.ClassMerger.Core
 			}
 		}
 
-		private static void CopyFromTo(TypeDefinition source, TypeDefinition target)
+		private static void CopyFromTo(TypeDefinition source, TypeDefinition target, ModuleDefinition moduleDefinition)
 		{
+			var size = target.ClassSize;
+			if (BuildPipeline.isBuildingPlayer)
+				target.Fields.Add(new FieldDefinition("addedField", Mono.Cecil.FieldAttributes.Private,
+					moduleDefinition.TypeSystem.String));
+			
 			foreach (var member in source.Fields)
 			{
-				target.Fields.AddSafe(member.Copy());
+				target.Fields.AddSafe(member.Copy(moduleDefinition));
 			}
 			foreach (var member in source.Methods)
 			{
 				target.Methods.Add(member.Copy());
 			}
+			Debug.Log("Size before: " + size + ", after: " + target.ClassSize + ", Source? " + source.ClassSize);
 		}
 	}
 }

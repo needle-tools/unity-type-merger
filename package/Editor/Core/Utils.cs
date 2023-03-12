@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using Mono.Cecil;
 using Mono.Collections.Generic;
 using UnityEngine;
@@ -35,16 +37,29 @@ namespace Needle.ClassMerger.Core
 			list.Add(member);
 		}
 
-		public static FieldDefinition Copy(this FieldDefinition member)
+		public static FieldDefinition Copy(this FieldDefinition member, ModuleDefinition moduleDefinition)
 		{
-			var copy = new FieldDefinition(member.Name, member.Attributes, member.FieldType);
-			copy.Constant = member.Constant;
-			copy.InitialValue = member.InitialValue; 
-			copy.IsRuntimeSpecialName = member.IsRuntimeSpecialName;
-			copy.IsSpecialName = member.IsSpecialName;
-			copy.IsStatic = member.IsStatic;
-			copy.IsNotSerialized = member.IsNotSerialized;
-			copy.IsPInvokeImpl = member.IsPInvokeImpl;
+			// var newRefrence = new TypeReference(member.FieldType);
+			var fieldType = moduleDefinition.GetTypeReferences();
+			var copy = new FieldDefinition("test", member.Attributes, moduleDefinition.TypeSystem.String); 
+			// copy.Constant = member.Constant;
+			// copy.InitialValue = member.InitialValue; 
+			// copy.IsRuntimeSpecialName = member.IsRuntimeSpecialName;
+			// copy.IsSpecialName = member.IsSpecialName;
+			// copy.IsStatic = member.IsStatic;
+			// copy.IsNotSerialized = member.IsNotSerialized;
+			// copy.IsPInvokeImpl = member.IsPInvokeImpl;
+			// copy.Offset = member.Offset;
+			// copy.IsAssembly = member.IsAssembly;
+			// copy.IsFamily = member.IsFamily;
+			// copy.IsFamilyAndAssembly = member.IsFamilyAndAssembly;
+			// copy.IsFamilyOrAssembly = member.IsFamilyOrAssembly;
+			// copy.IsPrivate = member.IsPrivate;
+			// copy.IsPublic = member.IsPublic;
+			// copy.IsInitOnly = member.IsInitOnly;
+			// copy.IsLiteral = member.IsLiteral;
+			// copy.IsSpecialName = member.IsSpecialName;
+			// copy.IsCompilerControlled = member.IsCompilerControlled;
 			return copy;
 		}
 
