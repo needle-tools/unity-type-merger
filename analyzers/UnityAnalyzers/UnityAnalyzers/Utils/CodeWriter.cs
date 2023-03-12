@@ -13,10 +13,10 @@ namespace UnityAnalyzers
 			indent++;
 		}
 
-		public void EndBlock()
+		public void EndBlock(string postfix = null)
 		{
 			indent--;
-			WriteLine("}");
+			WriteLine("}" + postfix);
 		}
 		
 		public void WriteLine(string line)
