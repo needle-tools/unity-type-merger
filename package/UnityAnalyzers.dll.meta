@@ -2,8 +2,6 @@ fileFormatVersion: 2
 guid: c5655fdfaa9b80343b725f5ab5c07ff5
 labels:
 - RoslynAnalyzer
-- SourceGenerator
-- RunOnlyOnAssembliesWithReference
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2

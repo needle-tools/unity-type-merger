@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
@@ -10,34 +11,27 @@ namespace UnityAnalyzers
 		
 		public void Execute(GeneratorExecutionContext context)
 		{
-			var writer = new CodeWriter();
+			System.Console.WriteLine(System.DateTime.Now.ToString(CultureInfo.InvariantCulture));
 			
 			var callingEntrypoint = context.Compilation.GetEntryPoint(context.CancellationToken);
-			var types = context.Compilation.SourceModule.ReferencedAssemblySymbols;
 			
+			var writer = new CodeWriter();
 			writer.WriteLine("using System;");
 			writer.WriteLine("using UnityEngine;");
 			writer.WriteLine("#if UNITY_EDITOR");
 			writer.WriteLine("using UnityEditor;");
 			writer.WriteLine("#endif");
-			writer.WriteLine($"namespace {callingEntrypoint!.ContainingNamespace.ContainingNamespace.Name}.{callingEntrypoint!.ContainingNamespace.Name}");
+			writer.WriteLine($"namespace MyNamespace");// {callingEntrypoint!.ContainingNamespace.ContainingNamespace.Name}.{callingEntrypoint!.ContainingNamespace.Name}");
 			writer.BeginBlock();
-			
-			writer.WriteLine("public class TestComponent : MonoBehaviour");
+			writer.WriteLine("public partial class TestComponent : MonoBehaviour");
 			writer.BeginBlock();
-			
+			writer.WriteLine("public string mySourceGen = \"Hi From Sourcegen\";");
+			writer.WriteLine("public void OnEnable()");
+			writer.BeginBlock();
+			writer.WriteLine("Debug.Log(\"OnEnable\");");
 			writer.EndBlock();
-			
 			writer.EndBlock();
-			
-			foreach (var type in types)
-			{
-				foreach (var mod in type.Modules)
-				{
-					
-				}
-			}
-
+			writer.EndBlock();
 			context.AddSource("TestComponent", SourceText.From(writer.ToString(), Encoding.UTF8));
 		}
 
