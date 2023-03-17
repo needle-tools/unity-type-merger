@@ -7,11 +7,13 @@ namespace UnityAnalyzers
 	[Generator]
 	public class MenuItemGenerator : ISourceGenerator
 	{
+		private static bool _didRun = false;
+		
 		public void Execute(GeneratorExecutionContext context)
 		{
-			// Doesnt work for some reason
+			if (_didRun) return;
+			_didRun = true;
 			var writer = new CodeWriter();
-			var callingEntrypoint = context.Compilation.GetEntryPoint(context.CancellationToken);
 			writer.WriteLine("using System;");
 			writer.WriteLine("using UnityEngine;");
 			writer.WriteLine("#if UNITY_EDITOR");

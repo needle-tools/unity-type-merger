@@ -15,35 +15,21 @@ namespace UnityAnalyzers
 
 	[Generator]
 	public class MergedClassGenerator : ISourceGenerator
-	{
+	{		// https://github.com/needle-mirror/com.unity.entities/blob/2b7ad3ab445aff771ddffa3dd9d330f21fb1dd70/Unity.Entities/SourceGenerators/Source~/SystemGenerator/SystemGenerator.cs#L20
+
+		
 		private class CurrentClassIdentifierReceiver : ISyntaxReceiver
 		{
-			// public readonly List<ClassDeclarationSyntax> ReceivedClasses = new();
+			public readonly List<ClassDeclarationSyntax> Classes = new();
 
 			public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
 			{
-				// if (syntaxNode is ClassDeclarationSyntax cds)
-				// {
-				// 	ReceivedClasses.Add(cds);
-				// }
+				if (syntaxNode is ClassDeclarationSyntax cds)
+				{
+					Classes.Add(cds);
+				}
 			}
 		}
-		
-		// https://github.com/needle-mirror/com.unity.entities/blob/2b7ad3ab445aff771ddffa3dd9d330f21fb1dd70/Unity.Entities/SourceGenerators/Source~/SystemGenerator/SystemGenerator.cs#L20
-		// public void Initialize(GeneratorInitializationContext context)
-		// {
-		// 	// Registering this here causes errors? Execute doesnt run anymore
-		// 	context.RegisterForSyntaxNotifications(this.OnSyntaxNotifications);
-		// 	
-		// 	context.RegisterForPostInitialization((c) =>
-		// 	{
-		// 	});
-		// }
-		//
-		// private ISyntaxContextReceiver? OnSyntaxNotifications()
-		// {
-		// 	return null;
-		// }
 
 		public void Initialize(GeneratorInitializationContext context)
 		{
@@ -52,8 +38,7 @@ namespace UnityAnalyzers
 
 		public void Execute(GeneratorExecutionContext context)
 		{
-
-			// var callingEntrypoint = context.Compilation.GetEntryPoint(context.CancellationToken);
+			var receiver = (CurrentClassIdentifierReceiver) context.SyntaxReceiver!;
 
 			var trees = context.Compilation.SyntaxTrees;
 			var typeInfoCollector = new TypesToMergeCollector();
@@ -76,7 +61,7 @@ namespace UnityAnalyzers
 			writer.WriteLine($"// Assembly: {context.Compilation.AssemblyName}");
 			writer.WriteLine($"// SourceModule: {context.Compilation.SourceModule.Name}");
 			writer.WriteLine($"// ScriptClass: {context.Compilation.ScriptClass?.Name}");
-			writer.WriteLine($"// Classes: ");
+			writer.WriteLine($"// Classes: {string.Join(", ", receiver.Classes.Select(c => c.Identifier.Text))}");
 			writer.WriteLine($"// ContainingNamespace: {context.Compilation.ScriptClass?.ContainingNamespace?.Name}");
 			// writer.WriteLine($"// CallingEntryPoint: {callingEntrypoint?.Name}");
 			writer.WriteLine($"// AdditionalFiles: {string.Join(", ", context.AdditionalFiles)}");
