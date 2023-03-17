@@ -30,19 +30,24 @@ namespace UnityAnalyzers
 		}
 		
 		// https://github.com/needle-mirror/com.unity.entities/blob/2b7ad3ab445aff771ddffa3dd9d330f21fb1dd70/Unity.Entities/SourceGenerators/Source~/SystemGenerator/SystemGenerator.cs#L20
+		// public void Initialize(GeneratorInitializationContext context)
+		// {
+		// 	// Registering this here causes errors? Execute doesnt run anymore
+		// 	context.RegisterForSyntaxNotifications(this.OnSyntaxNotifications);
+		// 	
+		// 	context.RegisterForPostInitialization((c) =>
+		// 	{
+		// 	});
+		// }
+		//
+		// private ISyntaxContextReceiver? OnSyntaxNotifications()
+		// {
+		// 	return null;
+		// }
+
 		public void Initialize(GeneratorInitializationContext context)
 		{
-			// Registering this here causes errors? Execute doesnt run anymore
-			// context.RegisterForSyntaxNotifications(this.OnSyntaxNotifications);
-			
-			context.RegisterForPostInitialization((c) =>
-			{
-			});
-		}
-
-		private ISyntaxContextReceiver? OnSyntaxNotifications()
-		{
-			return null;
+			context.RegisterForSyntaxNotifications(() => new CurrentClassIdentifierReceiver());
 		}
 
 		public void Execute(GeneratorExecutionContext context)
