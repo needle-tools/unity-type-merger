@@ -17,7 +17,7 @@ namespace Needle.ClassMerging
 		
 		public void Initialize(GeneratorInitializationContext context)
 		{
-			context.RegisterForSyntaxNotifications(() => new IdentifierReceiver());
+			context.RegisterForSyntaxNotifications(() => new IdentifierReceiver(context));
 		}
 
 		public void Execute(GeneratorExecutionContext context)
@@ -25,7 +25,8 @@ namespace Needle.ClassMerging
 			var receiver = (IdentifierReceiver)context.SyntaxReceiver!;
 			if (!receiver.HasClasses) return;
 
-			var classInfos = receiver.Collector.Infos;
+			var collector = receiver.Collector;
+			var classInfos = collector.Infos;
 			
 			var debugWriter = new CodeWriter();
 			var wr = new ClassWriter(debugWriter);
@@ -33,15 +34,22 @@ namespace Needle.ClassMerging
 
 
 			var writer = new CodeWriter();
+			var foundAny = false;
 			foreach (var info in wr.WriteInfos(context, classInfos, writer))
 			{
+				foundAny = true;
 				writer.WriteLine("/* DEBUG:");
+				writer.WriteLine(collector.debugWriter.ToString() + "\n");
 				writer.WriteLine(debugWriter.ToString());
 				writer.WriteLine("*/");
 				
 				var code = SourceText.From(writer.ToString(), Encoding.UTF8);
 				context.AddSource($"{info}.generated.cs", code);
 				writer.Clear();
+			}
+			if (!foundAny)
+			{
+				// provide some debug info
 			}
 
 			// writer.WriteLine($"// Generated at {DateTime.Now.ToString(CultureInfo.InvariantCulture)}");
