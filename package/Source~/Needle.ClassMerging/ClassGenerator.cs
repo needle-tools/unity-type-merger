@@ -49,35 +49,21 @@ namespace Needle.ClassMerging
 			}
 			if (!foundAny)
 			{
-				// provide some debug info
+				writer.WriteLine("/*");
+				writer.WriteLine("//DEBUG");
+				writer.WriteLine(debugWriter.ToString());
+				writer.WriteLine("//END DEBUG");
+				writer.WriteLine("*/\n");
+			
+				writer.WriteLine("using System;");
+				writer.WriteLine("using UnityEngine;");
+				writer.WriteLine($"\nnamespace MyNamespace");// {callingEntrypoint!.ContainingNamespace.ContainingNamespace.Name}.{callingEntrypoint!.ContainingNamespace.Name}");
+				writer.BeginBlock();
+				writer.WriteLine("public partial class TestComponent : MonoBehaviour {}");
+				writer.EndBlock();
+				context.AddSource("TestComponent.generated.cs", SourceText.From(writer.ToString(), Encoding.UTF8));
 			}
 
-			// writer.WriteLine($"// Generated at {DateTime.Now.ToString(CultureInfo.InvariantCulture)}");
-			// writer.WriteLine($"// Assembly: {context.Compilation.AssemblyName}");
-			// writer.WriteLine($"// SourceModule: {context.Compilation.SourceModule.Name}");
-			// writer.WriteLine($"// ScriptClass: {context.Compilation.ScriptClass?.Name}");
-			// writer.WriteLine($"// Classes: {string.Join(", ", receiver.Collector.Infos)}");
-			// writer.WriteLine( $"// ContainingNamespace: {context.Compilation.ScriptClass?.ContainingNamespace?.Name}");
-			// // writer.WriteLine($"// CallingEntryPoint: {callingEntrypoint?.Name}");
-			// writer.WriteLine($"// AdditionalFiles: {string.Join(", ", context.AdditionalFiles)}");
-			// writer.WriteLine();
-			//
-			// writer.WriteLine("/*");
-			// writer.WriteLine("//DEBUG");
-			// writer.WriteLine(debugWriter.ToString());
-			// writer.WriteLine("//END DEBUG");
-			// writer.WriteLine("*/\n");
-			//
-			// writer.WriteLine("using System;");
-			// writer.WriteLine("using UnityEngine;");
-			// writer.WriteLine($"\nnamespace MyNamespace");// {callingEntrypoint!.ContainingNamespace.ContainingNamespace.Name}.{callingEntrypoint!.ContainingNamespace.Name}");
-			// writer.BeginBlock();
-			// writer.WriteLine("public partial class TestComponent : MonoBehaviour");
-			// writer.BeginBlock();
-			//
-			// writer.EndBlock();
-			// writer.EndBlock();
-			// context.AddSource("TestComponent.generated.cs", SourceText.From(writer.ToString(), Encoding.UTF8));
 		}
 	}
 }

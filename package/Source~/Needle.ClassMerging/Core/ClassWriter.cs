@@ -30,6 +30,7 @@ namespace Needle.ClassMerging.Core
 					if (found) break;
 					var model = context.Compilation.GetSemanticModel(tree);
 
+					// If we dont have a full name yet but a typeof syntax, try to get the full name
 					if (string.IsNullOrEmpty(info.SourceClassFullName) && info.SourceTypeSyntax != null)
 					{
 						try
@@ -58,15 +59,16 @@ namespace Needle.ClassMerging.Core
 					found = visitor.Result;
 				}
 
-				if (!found)
+				if (!found && !string.IsNullOrWhiteSpace(info.SourceClassFullName))
 				{
-					var typeSymbol = context.Compilation.GetTypeByMetadataName(info.SourceClassFullName);
+					var typeSymbol = context.Compilation.GetTypeByMetadataName(info.SourceClassFullName!);
 					debug.WriteLine("SEARCH:\t" + info.SourceClassFullName + " is " + typeSymbol + "?");
 					if (typeSymbol != null)
 					{
 						var references = typeSymbol.DeclaringSyntaxReferences;
 						foreach (var reference in references)
 						{
+							if (found) break;
 							var tree = reference.SyntaxTree;
 							var root = tree.GetCompilationUnitRoot();
 							var visitor = new ClassInfoWalker(info, debug);
