@@ -58,3 +58,6 @@ namespace MyNamespace
 	}
 }
 ```
+
+Final component:  
+![image](https://user-images.githubusercontent.com/5083203/226190153-589ec52c-6ba7-4693-9c1f-5204c03b87a7.png)
