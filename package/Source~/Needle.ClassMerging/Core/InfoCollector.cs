@@ -26,7 +26,7 @@ namespace Needle.ClassMerging.Core
 			var foundMergeAttribute = default(AttributeSyntax);
 			foreach (var att in attributes)
 			{
-				if (att.Name.ToString() == "MergeClasses")
+				if (att.Name.ToString() == AttributeGenerator.AttributeName)
 				{
 					foundMergeAttribute = att;
 					break;
