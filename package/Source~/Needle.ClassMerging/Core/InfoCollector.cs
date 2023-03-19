@@ -3,9 +3,9 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace UnityAnalyzers
+namespace Needle.ClassMerging.Core
 {
-	public class MergeInfoCollector : CSharpSyntaxWalker
+	public class InfoCollector : CSharpSyntaxWalker
 	{
 		public readonly List<ClassMergeInfo> Infos = new();
 

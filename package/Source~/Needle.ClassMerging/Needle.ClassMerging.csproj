@@ -13,7 +13,7 @@
 
     <Target Name="CopyDLLs" AfterTargets="Build">
         <Message Text="Executing CopyDLLs task" Importance="High" />
-        <Copy SourceFiles="$(TargetDir)$(ProjectName).dll" DestinationFolder="$(SolutionDir)/../../package" />
+        <Copy SourceFiles="$(TargetDir)$(ProjectName).dll" DestinationFolder="$(SolutionDir)/.." />
     </Target>
 
 </Project>

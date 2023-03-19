@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace UnityAnalyzers
+namespace Needle.ClassMerging.Core
 {
 	public class ClassMergeInfo
 	{

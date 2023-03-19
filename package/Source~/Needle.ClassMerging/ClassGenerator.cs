@@ -1,38 +1,34 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
+using Needle.ClassMerging.Core;
+using UnityAnalyzers;
 
-namespace UnityAnalyzers
+namespace Needle.ClassMerging
 {
 	// https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.cookbook.md#augment-user-code
 	// https://www.infoq.com/articles/CSharp-Source-Generator/
 
 
 	[Generator]
-	public class MergedClassGenerator : ISourceGenerator
+	public class ClassGenerator : ISourceGenerator
 	{
 		// https://github.com/needle-mirror/com.unity.entities/blob/2b7ad3ab445aff771ddffa3dd9d330f21fb1dd70/Unity.Entities/SourceGenerators/Source~/SystemGenerator/SystemGenerator.cs#L20
-
-
+		
 		public void Initialize(GeneratorInitializationContext context)
 		{
-			context.RegisterForSyntaxNotifications(() => new CurrentClassIdentifierReceiver());
+			context.RegisterForSyntaxNotifications(() => new IdentifierReceiver());
 		}
 
 		public void Execute(GeneratorExecutionContext context)
 		{
-			var receiver = (CurrentClassIdentifierReceiver)context.SyntaxReceiver!;
+			var receiver = (IdentifierReceiver)context.SyntaxReceiver!;
 			if (!receiver.HasClasses) return;
 
 			var classInfos = receiver.Collector.Infos;
-
-
+			
 			var debugWriter = new CodeWriter();
-			var wr = new MergeClassWriter(debugWriter);
+			var wr = new ClassWriter(debugWriter);
 			wr.CollectInfos(context, classInfos);
 
 
@@ -73,15 +69,4 @@ namespace UnityAnalyzers
 			// context.AddSource("TestComponent.generated.cs", SourceText.From(writer.ToString(), Encoding.UTF8));
 		}
 	}
-
-
-	// writer.WriteLine("public string[] listOfClasses = new[]");
-	// writer.BeginBlock();
-	// for (var index = 0; index < walker.Classes.Count; index++)
-	// {
-	// 	var @class = walker.Classes[index];
-	// 	var end = index == walker.Classes.Count - 1 ? "" : ",";
-	// 	writer.WriteLine($"{@class}{end}");
-	// }
-	// writer.EndBlock(";");
 }

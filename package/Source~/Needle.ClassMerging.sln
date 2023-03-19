@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityAnalyzers", "UnityAnalyzers\UnityAnalyzers.csproj", "{D410FDFB-DED4-479D-92A3-A9BAA67295D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Needle.CLassMerging", "Needle.ClassMerging\Needle.ClassMerging.csproj", "{D410FDFB-DED4-479D-92A3-A9BAA67295D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
