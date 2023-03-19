@@ -68,3 +68,4 @@ Final component:
 - If the main class already has a base type and a partial also has a base type it will cause compiler errors (Sourcegen currently doesnt check that)
 - If partials have member name collisions (e.g. two classes declaring a method name `MySpecialMethod` it will cause compiler errors)
 - Types must be referenced using FullName, resolving `typeof` references in the MergeClass attribute is currently not implemented  
+- Types to merge must be in the same assembly at the moment
