@@ -61,3 +61,9 @@ namespace MyNamespace
 
 Final component:  
 ![image](https://user-images.githubusercontent.com/5083203/226190153-589ec52c-6ba7-4693-9c1f-5204c03b87a7.png)
+
+
+## Limitations
+- Multiple base classes are not supported (e.g. for multiple partials deriving from different classes only the first one will be used)
+- If the main class already has a base type and a partial also has a base type it will cause compiler errors (Sourcegen currently doesnt check that)
+- If partials have member name collisions (e.g. two classes declaring a method name `MySpecialMethod` it will cause compiler errors)
