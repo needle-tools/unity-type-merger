@@ -26,6 +26,7 @@ namespace Needle.ClassMerging
 			writer.WriteLine($"internal class {AttributeClassName} : System.Attribute");
 			writer.BeginBlock();
 			writer.WriteLine($"public {AttributeClassName}(params string[] types) {{ }}");
+			writer.WriteLine($"public {AttributeClassName}(params Type[] types) {{ }}");
 			writer.EndBlock();
 			writer.EndBlock();
 			var source = SourceText.From(writer.ToString(), Encoding.UTF8);

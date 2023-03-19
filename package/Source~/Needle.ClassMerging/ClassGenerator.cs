@@ -33,9 +33,12 @@ namespace Needle.ClassMerging
 
 
 			var writer = new CodeWriter();
-			foreach (var info in wr.WriteInfos(classInfos, writer))
+			foreach (var info in wr.WriteInfos(context, classInfos, writer))
 			{
-				debugWriter.WriteLine(writer.ToString());
+				writer.WriteLine("/* DEBUG:");
+				writer.WriteLine(debugWriter.ToString());
+				writer.WriteLine("*/");
+				
 				var code = SourceText.From(writer.ToString(), Encoding.UTF8);
 				context.AddSource($"{info}.generated.cs", code);
 				writer.Clear();

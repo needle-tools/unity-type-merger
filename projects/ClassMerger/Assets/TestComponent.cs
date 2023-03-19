@@ -1,3 +1,4 @@
+using System;
 using Needle;
 using UnityEditor;
 using UnityEditorInternal;
@@ -6,9 +7,14 @@ using UnityEngine.Serialization;
 
 namespace MyNamespace
 {
-	[MergeClass("MyNamespace.MyOtherType", "MyNamespace.SomeOtherBehaviour")]
+	[MergeClass("MyNamespace.MyOtherType", "MyNamespace.SomeOtherBehaviour", "MyNamespace.SomeThirdType")]
 	public partial class TestComponent : MonoBehaviour
 	{
-		public string SomeString = "Hello World"; 
+		public string SomeString = "Hello World";
+
+		private void Start()
+		{
+			
+		}
 	}
 }

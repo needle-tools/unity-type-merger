@@ -23,34 +23,31 @@ namespace Needle.ClassMerging.Core
 			base.VisitClassDeclaration(node);
 			var attributes = node.AttributeLists.FirstOrDefault()?.Attributes;
 			if (attributes == null) return;
-			var foundMergeAttribute = default(AttributeSyntax);
 			foreach (var att in attributes)
 			{
 				if (att.Name.ToString() == AttributeGenerator.AttributeName)
 				{
-					foundMergeAttribute = att;
-					break;
+					var arguments = att.ArgumentList?.Arguments;
+					if (arguments == null) continue;
+
+					var targetClassName = node.Identifier.Text;
+					var targetClassNamespace = string.Join(".", namespaces);
+
+					foreach (var arg in arguments)
+					{
+						switch (arg.Expression)
+						{
+							// Handle params as string
+							case LiteralExpressionSyntax literal:
+								var name = literal.Token.Text.Trim('\"');
+								if (!Infos.Any(i => i.SourceClassFullName == name))
+									Infos.Add(new ClassMergeInfo(targetClassNamespace, targetClassName, name));
+								break;
+						}
+					}
 				}
 			}
-			if (foundMergeAttribute == null) return;
 
-			var arguments = foundMergeAttribute.ArgumentList?.Arguments;
-			if (arguments == null) return;
-
-			var targetClassName = node.Identifier.Text;
-			var targetClassNamespace = string.Join(".", namespaces);
-
-			foreach (var arg in arguments)
-			{
-				switch (arg.Expression)
-				{
-					case LiteralExpressionSyntax literal:
-						var name = literal.Token.Text.Trim('\"');
-						if (!Infos.Any(i => i.SourceClassFullName == name))
-							Infos.Add(new ClassMergeInfo(targetClassNamespace, targetClassName, name));
-						break;
-				}
-			}
 		}
 	}
 }

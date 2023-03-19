@@ -2,7 +2,11 @@
 
 namespace MyNamespace
 {
-	public class MyOtherType
+	public interface IMyInterface
+	{
+	}
+
+	public class MyOtherType : IMyInterface
 	{
 		public string HelloWorld = "test123";
 	}
