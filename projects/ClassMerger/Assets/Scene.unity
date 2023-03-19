@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 918918288}
   - component: {fileID: 918918289}
   - component: {fileID: 918918290}
+  - component: {fileID: 918918291}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -261,8 +262,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SomeString: Hello World
-  HelloWorld: test123
+  OtherTypeList: 
   Active: 1
+  SomeThirdTypeString: Hello World
 --- !u!114 &918918290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,7 +277,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2965732205fe4b9dbb568a94e450d66c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Comp: {fileID: 918918289}
+  Comp: {fileID: 0}
+--- !u!114 &918918291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918918287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ffc39fe791cbd146a2d5ffafc554c90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PartialList: []
 --- !u!1 &1760669121
 GameObject:
   m_ObjectHideFlags: 0
