@@ -13,13 +13,13 @@ namespace UnityAnalyzers
 			indent++;
 		}
 
-		public void EndBlock(string postfix = null)
+		public void EndBlock(string? postfix = null)
 		{
 			indent--;
 			WriteLine("}" + postfix);
 		}
 		
-		public void WriteLine(string line)
+		public void WriteLine(string? line = null)
 		{
 			for (int i = 0; i < indent; i++) 
 				builder.Append("\t");
@@ -29,6 +29,11 @@ namespace UnityAnalyzers
 		public override string ToString()
 		{
 			return builder.ToString();
+		}
+		
+		public void Clear()	
+		{
+			builder.Clear();
 		}
 	}
 }
