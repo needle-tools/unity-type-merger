@@ -22,13 +22,59 @@ namespace Needle.ClassMerging.Core
 		{
 			foreach (var info in infos)
 			{
+				var found = false;
 				foreach (var tree in context.Compilation.SyntaxTrees)
 				{
+					if (found) break;
 					// If we found the class we dont need to continue
 					var root = tree.GetCompilationUnitRoot();
 					var visitor = new ClassInfoWalker(info, debug);
 					visitor.Visit(root);
-					if (visitor.Result) break;
+					found = visitor.Result;
+				}
+
+				const bool searchInAssemblies = false;
+				if (!found && searchInAssemblies)
+				{
+					debug.WriteLine();
+					debug.WriteLine("SEARCHING IN REFERENCED ASSEMBLIES ...");
+					// search in referenced assemblies
+					// search in reverse order since it's more likely that we want to merge a type from our own project
+					// which is in the end of the list
+					for (var index = context.Compilation.References.ToArray().Length - 1; index >= 0; index--)
+					{
+						var assembly = context.Compilation.References.ToArray()[index];
+						if (found) break;
+						var assemblySymbol = context.Compilation.GetAssemblyOrModuleSymbol(assembly) as IAssemblySymbol;
+						if (assemblySymbol == null)
+						{
+							continue;
+						}
+						var types = assemblySymbol.GetForwardedTypes();
+						debug.WriteLine(
+							$"SEARCHING IN ASSEMBLY: {assembly.Display} ... Modules: {assemblySymbol.Modules.Count()}, Types: {types.Length} ...");
+						foreach (var moduleSymbol in assemblySymbol.Modules)
+						{
+							if (found) break;
+							debug.WriteLine(
+								$"SEARCHING IN MODULE: {moduleSymbol.Name} ({moduleSymbol.DeclaringSyntaxReferences.Count()}) ...");
+							foreach (var tree in moduleSymbol.DeclaringSyntaxReferences)
+							{
+								if (found) break;
+								var root = tree.GetSyntax();
+								debug.WriteLine("SEARCHING IN TREE: " + tree.SyntaxTree.FilePath + " ...");
+								var visitor = new ClassInfoWalker(info, debug);
+								visitor.Visit(root);
+								found = visitor.Result;
+								// For testing only check one
+								return;
+							}
+							// For testing only check one
+							break;
+						}
+						// For testing only check one
+						break;
+					}
 				}
 			}
 		}
