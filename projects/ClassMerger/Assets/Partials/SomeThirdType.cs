@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace MyNamespace
+namespace Partials
 {
 	public class SomeThirdType : ScriptableObject
 	{
@@ -8,5 +8,11 @@ namespace MyNamespace
 		{
 			Debug.Log("Hello from some third type");
 		}
+
+		// It doesnt work if multiple types have the same method name
+		// public void SomeMethod()
+		// {
+		// 	
+		// }
 	}
 }

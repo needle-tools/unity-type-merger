@@ -8,7 +8,7 @@ namespace MyNamespace
 
 		public void Start()
 		{
-			Comp?.MySpecialMethod();
+			// Comp?.MySpecialMethod();
 		}
 	}
 }

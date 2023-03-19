@@ -41,11 +41,11 @@ namespace Needle.ClassMerging.Core
 			if (fullName.Length > 0) fullName += ".";
 			fullName += node.Identifier.ToString();
 			
-			debug.WriteLine(fullName + " ?= " + info.SourceClassFullName);
+			debug.WriteLine("SEARCH:\t" + info.SourceClassFullName + " is " + fullName + "?");
 			// is it the full name we search?
 			if (fullName == info.SourceClassFullName)
 			{
-				debug.WriteLine("> FOUND FOR " + info.TargetClassName + "!");
+				debug.WriteLine("> FOUND\tFOR " + info.TargetClassName + "!");
 				info.AddClass(node);
 				Result = true;
 			}

@@ -15,5 +15,10 @@ namespace MyNamespace
 		{
 			
 		}
+
+		public void SomeMethod()
+		{
+			
+		}
 	}
 }

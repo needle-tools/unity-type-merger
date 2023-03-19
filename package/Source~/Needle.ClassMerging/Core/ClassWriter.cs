@@ -63,8 +63,12 @@ namespace Needle.ClassMerging.Core
 
 				writer.WriteLine();
 
-				writer.WriteLine("namespace " + targetClassInfo.TargetClassNamespace);
-				writer.BeginBlock(); // Begin Namespace
+				var hasNamespace = !string.IsNullOrEmpty(targetClassInfo.TargetClassNamespace);
+				if (hasNamespace)
+				{
+					writer.WriteLine("namespace " + targetClassInfo.TargetClassNamespace);
+					writer.BeginBlock(); // Begin Namespace
+				}
 
 				var classDeclarationStr = $"public partial class {targetClassInfo.TargetClassName}";
 				AddBaseTypes(context, data, ref classDeclarationStr);
@@ -86,7 +90,8 @@ namespace Needle.ClassMerging.Core
 				}
 				writer.EndBlock(); // End Class
 
-				writer.EndBlock(); // End Namespace
+				if (hasNamespace)
+					writer.EndBlock(); // End Namespace
 
 				yield return info.Key;
 			}
@@ -132,7 +137,7 @@ namespace Needle.ClassMerging.Core
 					if (!string.IsNullOrEmpty(classString)) str += ", ";
 					str += interfacesString;
 				}
-				
+
 				for (var i = 1; i < foundClasses.Count; i++)
 				{
 					str += " // " + foundClasses.ElementAt(i);
