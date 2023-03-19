@@ -7,9 +7,11 @@ namespace Needle.ClassMerging.Core
 	{
 		public readonly string TargetClassNamespace;
 		public readonly string TargetClassName;
-		public readonly string SourceClassFullName;
 		
-		public ClassMergeInfo(string targetClassNamespace, string targetClassName, string sourceClassFullName)
+		public string? SourceClassFullName;
+		public TypeSyntax? SourceTypeSyntax;
+		
+		public ClassMergeInfo(string targetClassNamespace, string targetClassName, string? sourceClassFullName)
 		{
 			this.TargetClassNamespace = targetClassNamespace;
 			SourceClassFullName = sourceClassFullName;

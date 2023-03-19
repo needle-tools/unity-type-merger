@@ -1,4 +1,6 @@
-﻿using Unity.VisualScripting;
+﻿using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 
 namespace MyNamespace
 {
@@ -9,7 +11,8 @@ namespace MyNamespace
 
 	public class MyOtherType : IMyInterface
 	{
-		public string HelloWorld = "test123";
+		[Header(nameof(MyOtherType))]
+		public List<int> OtherTypeList;
 		
 		public void MyInterfaceMethod()
 		{

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -56,9 +57,15 @@ namespace Needle.ClassMerging.Core
 									break;
 								// Handle typeof
 								case TypeOfExpressionSyntax typeOf:
-									// TODO: make it work with typeof - we might need to resolve the full type namespace later
 									var type = typeOf.Type;
-									debugWriter.WriteLine("??? TypeOf: " + type);
+									if (!Infos.Any(i => i.SourceTypeSyntax == type))
+									{
+										debugWriter.WriteLine("??? TypeOf: " + type);
+										// find type using
+										var info = new ClassMergeInfo(targetClassNamespace, targetClassName, null);
+										info.SourceTypeSyntax = type;
+										Infos.Add(info);
+									}
 									break;
 							}
 						}

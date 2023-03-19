@@ -1,13 +1,16 @@
+using DifferentAssembly;
 using Needle;
+using UnityEngine;
 
 namespace MyNamespace
 {
-	[MergeClass("MyNamespace.MyOtherType", "MyNamespace.SomeOtherBehaviour")]
+	// [MergeClass("MyNamespace.MyOtherType", "MyNamespace.SomeOtherBehaviour")]
 	[MergeClass("Partials.SomeThirdType")]
-	[MergeClass("DifferentAssembly.PartialInDifferentAssembly")]
-	[MergeClass(typeof(ReferencingTestComponent))]
-	public partial class TestComponent
+	[MergeClass(typeof(MyOtherType))]
+	// [MergeClass("DifferentAssembly.PartialInDifferentAssembly")]
+	// [MergeClass(typeof(PartialInDifferentAssembly))]
+	public partial class TestComponent : MonoBehaviour
 	{
-		public string SomeString = "Hello World";
-	}
+		public string SomeString = "Hello World";     
+	} 
 }
