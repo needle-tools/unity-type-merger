@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace UnityAnalyzers
+namespace Needle.ClassMerging.Utils
 {
 	public class CodeWriter
 	{

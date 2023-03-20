@@ -14,7 +14,7 @@ namespace DifferentAssembly
         [ContextMenu("Test In Other Assembly")]
         private void ContextMenuTest()
         {
-            
+            Debug.Log("Hello from other assembly");
         }
         
     } 

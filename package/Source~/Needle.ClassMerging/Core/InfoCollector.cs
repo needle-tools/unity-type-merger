@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.ComTypes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using UnityAnalyzers;
+using Needle.ClassMerging.Utils;
 
 namespace Needle.ClassMerging.Core
 {

@@ -1,8 +1,11 @@
-﻿using System.Text;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Needle.ClassMerging.Core;
-using UnityAnalyzers;
+using Needle.ClassMerging.Utils;
 
 namespace Needle.ClassMerging
 {
@@ -14,7 +17,7 @@ namespace Needle.ClassMerging
 	public class ClassGenerator : ISourceGenerator
 	{
 		// https://github.com/needle-mirror/com.unity.entities/blob/2b7ad3ab445aff771ddffa3dd9d330f21fb1dd70/Unity.Entities/SourceGenerators/Source~/SystemGenerator/SystemGenerator.cs#L20
-		
+
 		public void Initialize(GeneratorInitializationContext context)
 		{
 			context.RegisterForSyntaxNotifications(() => new IdentifierReceiver(context));
@@ -24,46 +27,67 @@ namespace Needle.ClassMerging
 		{
 			var receiver = (IdentifierReceiver)context.SyntaxReceiver!;
 			if (!receiver.HasClasses) return;
+			
+#if DEBUG
+			if (!Debugger.IsAttached)
+			{
+				Debugger.Launch();
+			}
+#endif
+
+			var watch = Stopwatch.StartNew();
+			
+			context.LogInfo("\n// " + DateTime.Now.ToString("HH:mm:ss"));
+			context.LogInfo("--> ClassGenerator.Execute() for " +
+			                string.Join(", ", receiver.Collector.Infos.Select(i => i.TargetClassName)));
+			context.LogInfo("Assembly " + context.Compilation.AssemblyName);
 
 			var collector = receiver.Collector;
 			var classInfos = collector.Infos;
-			
+
 			var debugWriter = new CodeWriter();
 			var wr = new ClassWriter(debugWriter);
 			wr.CollectInfos(context, classInfos);
 
 
 			var writer = new CodeWriter();
-			var foundAny = false;
 			foreach (var info in wr.WriteInfos(context, classInfos, writer))
 			{
-				foundAny = true;
-				writer.WriteLine("/* DEBUG:");
-				writer.WriteLine(collector.debugWriter.ToString() + "\n");
-				writer.WriteLine(debugWriter.ToString());
-				writer.WriteLine("*/");
+				var raw = writer.ToString();
 				
-				var code = SourceText.From(writer.ToString(), Encoding.UTF8);
-				context.AddSource($"{info}.generated.cs", code);
-				writer.Clear();
-			}
-			if (!foundAny)
-			{
-				writer.WriteLine("/*");
-				writer.WriteLine("//DEBUG");
-				writer.WriteLine(debugWriter.ToString());
-				writer.WriteLine("//END DEBUG");
-				writer.WriteLine("*/\n");
-			
-				writer.WriteLine("using System;");
-				writer.WriteLine("using UnityEngine;");
-				writer.WriteLine($"\nnamespace MyNamespace");// {callingEntrypoint!.ContainingNamespace.ContainingNamespace.Name}.{callingEntrypoint!.ContainingNamespace.Name}");
-				writer.BeginBlock();
-				writer.WriteLine("public partial class TestComponent : MonoBehaviour {}");
-				writer.EndBlock();
-				context.AddSource("TestComponent.generated.cs", SourceText.From(writer.ToString(), Encoding.UTF8));
-			}
+// 				raw = @"
+// using System.Collections.Generic;
+//
+// namespace Assembly1
+// {
+// 	public partial class Assembly1Comp
+// 	{
+// 		public List<string> PartialList; 
+// 	}
+// }
+//
+//
+// ";
 
+				
+				var filename = $"{info}.generated.cs";
+// #if DEBUG
+				context.LogInfo("DEBUG INFO:");
+				context.LogInfo(collector.debugWriter.ToString());
+				context.LogInfo(debugWriter.ToString());
+				context.LogInfo("CODEGEN START: " + filename);
+				context.LogInfo("```csharp");
+				context.LogInfo(raw);
+				context.LogInfo("```");
+				context.LogInfo("CODEGEN END: " + filename);
+// #endif		
+				var code = SourceText.From(raw, Encoding.UTF8);
+
+				
+				context.AddSource(filename, code);
+				writer.Clear();
+				context.LogInfo("Written " + filename + " in " + watch.ElapsedMilliseconds + "ms");
+			}
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
-using UnityAnalyzers;
+using Needle.ClassMerging.Utils;
 
 namespace Needle.ClassMerging
 {
