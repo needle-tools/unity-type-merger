@@ -55,19 +55,19 @@ namespace Needle.ClassMerging
 			{
 				var raw = writer.ToString();
 				
-// 				raw = @"
-// using System.Collections.Generic;
-//
-// namespace Assembly1
-// {
-// 	public partial class Assembly1Comp
-// 	{
-// 		public List<string> PartialList; 
-// 	}
-// }
-//
-//
-// ";
+				raw = @"
+using System.Collections.Generic;
+
+namespace Assembly1
+{
+	public partial class Assembly1Comp
+	{
+		public List<string> PartialList; 
+	}
+}
+
+
+";
 
 				
 				var filename = $"{info}.generated.cs";

@@ -6,8 +6,7 @@ using UnityEngine;
 
 namespace MyNamespace
 {
-	[MergeClass(typeof(MyOtherType), typeof(SomeOtherBehaviour))]
-	[MergeClass(typeof(SomeThirdType))]
+	// [MergeClass(typeof(SomeThirdType))]
 	// [MergeClass(typeof(PartialInDifferentAssembly))]
 	public partial class TestComponent : MonoBehaviour
 	{
