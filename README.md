@@ -67,7 +67,7 @@ Final component:
 - Multiple base classes are not supported (e.g. for multiple partials deriving from different classes only the first one will be used)
 - If the main class already has a base type and a partial also has a base type it will cause compiler errors (Sourcegen currently doesnt check that)
 - If partials have member name collisions (e.g. two classes declaring a method name `MySpecialMethod` it will cause compiler errors). 
-- Types to merge must be in the same assembly at the moment
+- Types to merge must either be in the same assembly or the script file name must match the C# type name to merge (same as with Unity's components)
 
 
 ## Debugging
